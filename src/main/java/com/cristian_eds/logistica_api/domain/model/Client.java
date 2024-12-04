@@ -1,21 +1,34 @@
 package com.cristian_eds.logistica_api.domain.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 
 @Data
 @JsonSerialize
+@Entity
 public class Client {
-
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String name;
 	
 	private String email;
 	
+	@Column(name = "fone")
 	private String telefone;
+	
+	public Client() {};
 	
 	public Client(long id, String name, String email, String telefone) {
 		this.id = id;
@@ -52,6 +65,22 @@ public class Client {
 		return id;
 	}
 
-	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Client other = (Client) obj;
+		return Objects.equals(id, other.id);
+	}
+
 
 }
