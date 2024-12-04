@@ -1,0 +1,1 @@
+ALTER TABLE client ALTER COLUMN fone TYPE varchar(50);
