@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cristian_eds.logistica_api.domain.model.Client;
 import com.cristian_eds.logistica_api.repository.ClientRepository;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/clients")
@@ -52,12 +54,12 @@ public class ClientController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Client> addNewClient(@RequestBody Client client){
+	public ResponseEntity<Client> addNewClient(@Valid @RequestBody Client client){
 		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(repository.save(client));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Client> updateClient(@RequestBody Client client, @PathVariable Long id) {
+	public ResponseEntity<Client> updateClient(@Valid @RequestBody Client client, @PathVariable Long id) {
 		if(!repository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
