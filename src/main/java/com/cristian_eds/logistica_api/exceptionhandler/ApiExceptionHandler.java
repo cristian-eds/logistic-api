@@ -8,13 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.cristian_eds.logistica_api.domain.exception.DomainException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
@@ -42,5 +46,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		error.setFields(fields);
 		
 		return super.handleExceptionInternal(ex, error,headers, status, request);
+	}
+	
+	@ExceptionHandler(DomainException.class)
+	public ResponseEntity<Object> handleDomainException(DomainException ex,  WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		Error error = new Error();
+		error.setStatus(status.value());
+		error.setDateTime(LocalDateTime.now());
+		error.setTitle(ex.getMessage());
+		
+		return handleExceptionInternal(ex,error, new HttpHeaders(), status, request);
 	}
 }

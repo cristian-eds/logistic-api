@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cristian_eds.logistica_api.domain.model.Client;
+import com.cristian_eds.logistica_api.domain.service.ClientService;
 import com.cristian_eds.logistica_api.repository.ClientRepository;
 
 import jakarta.validation.Valid;
@@ -30,6 +31,9 @@ public class ClientController {
 	
 	@Autowired
 	private ClientRepository repository;
+	
+	@Autowired
+	private ClientService service;
 	
 	@GetMapping("/test")
 	public List<Client> listClients() {
@@ -55,7 +59,7 @@ public class ClientController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Client> addNewClient(@Valid @RequestBody Client client){
-		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(repository.save(client));
+		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(service.save(client));
 	}
 	
 	@PutMapping("/{id}")
@@ -64,16 +68,16 @@ public class ClientController {
 			return ResponseEntity.notFound().build();
 		}
 		client.setId(id);
-		return ResponseEntity.ok(repository.save(client));
+		return ResponseEntity.ok(service.save(client));
 	}
 
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-		if(!repository.existsById(id)) {
+	@DeleteMapping("/{clientId}")
+	public ResponseEntity<Void> deleteClient(@PathVariable Long clientId) {
+		if(!repository.existsById(clientId)) {
 			return ResponseEntity.notFound().build();
 		}
-		repository.deleteById(id);
+		service.delete(clientId);
 		return ResponseEntity.noContent().build();
 	}
 }
