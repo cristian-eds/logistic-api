@@ -2,22 +2,28 @@ package com.cristian_eds.logistica_api.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
 
 @Embeddable
 public class Addressee {
 	
+	@NotBlank
 	@Column(name = "addressee_name")
 	private String name;
 	
+	@NotBlank
 	@Column(name = "addressee_street")
 	private String street;
 	
+	@NotBlank
 	@Column(name = "addressee_number")
 	private String number;
 	
+	@NotBlank
 	@Column(name = "addressee_district")
 	private String district;
 	
+	@NotBlank
 	@Column(name = "addressee_additional_information")
 	private String additionalInformation;
 	
