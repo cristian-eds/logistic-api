@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,11 +31,14 @@ public class Delivery {
 	
 	private BigDecimal tax;
 	
+	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
 	private DeliveryStatus status;
 	
+	@JsonProperty(access = Access.READ_ONLY)
 	private LocalDateTime orderDate;
 	
+	@JsonProperty(access = Access.READ_ONLY)
 	private LocalDateTime completionDate;
 	
 	public Delivery() {

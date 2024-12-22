@@ -32,5 +32,9 @@ public class ClientService {
 		repository.deleteById(id);
 	}
 	
+	public Client findClient(Long id) {
+		return repository.findById(id).orElseThrow(() -> new DomainException("Client not found!"));
+	}
+	
 
 }
