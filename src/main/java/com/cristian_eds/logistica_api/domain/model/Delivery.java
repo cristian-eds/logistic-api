@@ -2,8 +2,11 @@ package com.cristian_eds.logistica_api.domain.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Delivery {
@@ -34,6 +38,9 @@ public class Delivery {
 	private OffsetDateTime orderDate;
 
 	private OffsetDateTime completionDate;
+	
+	@OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+	private List<Event> events = new ArrayList<>();
 	
 	public Delivery() {
 		super();
@@ -107,6 +114,15 @@ public class Delivery {
 		this.completionDate = completionDate;
 	}
 
+	
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -122,6 +138,17 @@ public class Delivery {
 			return false;
 		Delivery other = (Delivery) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	public Event addEvent(String description) {
+		Event event = new Event();
+		event.setDescription(description);
+		event.setRegistrationDate(OffsetDateTime.now());
+		event.setDelivery(this);
+		
+		this.getEvents().add(event);
+		
+		return event;
 	}
 	
 }

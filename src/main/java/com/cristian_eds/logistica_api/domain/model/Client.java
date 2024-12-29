@@ -2,7 +2,6 @@ package com.cristian_eds.logistica_api.domain.model;
 
 import java.util.Objects;
 
-import com.cristian_eds.logistica_api.domain.model.validations.ValidationGroups;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import jakarta.persistence.Column;
@@ -12,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
