@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cristian_eds.logistica_api.assembler.DeliveryAssembler;
 import com.cristian_eds.logistica_api.domain.model.Delivery;
 import com.cristian_eds.logistica_api.domain.service.RegistrationDeliveryService;
-import com.cristian_eds.logistica_api.model.AddresseeResponse;
 import com.cristian_eds.logistica_api.model.DeliveryResponse;
 import com.cristian_eds.logistica_api.repository.DeliveryRepository;
 
@@ -31,36 +31,25 @@ public class DeliveryController {
 	@Autowired
 	private DeliveryRepository deliveryRepository;
 	
+	@Autowired
+	private DeliveryAssembler deliveryAssembler;
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Delivery register(@Valid @RequestBody Delivery delivery) {
-		return registrationDeliveryService.register(delivery);
+	public DeliveryResponse register(@Valid @RequestBody Delivery delivery) {
+		Delivery deliveryRegistered = registrationDeliveryService.register(delivery);
+		return deliveryAssembler.toModel(deliveryRegistered);
 	}
 	
 	@GetMapping
-	public List<Delivery> listAll() {
-		return deliveryRepository.findAll();
+	public List<DeliveryResponse> listAll() {
+		return  deliveryAssembler.toCollectionModel(deliveryRepository.findAll());
 	}
 	
 	@GetMapping("/{deliveryId}")
 	public ResponseEntity<DeliveryResponse> findById(@PathVariable Long deliveryId) {
 		return deliveryRepository.findById(deliveryId).map(
-				delivery -> {
-					DeliveryResponse deliveryResponse = new DeliveryResponse();
-					deliveryResponse.setId(delivery.getId());
-					deliveryResponse.setClientName(delivery.getClient().getName());
-					deliveryResponse.setAddressee(new AddresseeResponse());
-					deliveryResponse.getAddressee().setAdditionalInformation(delivery.getAddressee().getAdditionalInformation());
-					deliveryResponse.getAddressee().setDistrict(delivery.getAddressee().getDistrict());
-					deliveryResponse.getAddressee().setName(delivery.getAddressee().getName());
-					deliveryResponse.getAddressee().setNumber(delivery.getAddressee().getNumber());
-					deliveryResponse.getAddressee().setStreet(delivery.getAddressee().getStreet());
-					deliveryResponse.setCompletionDate(delivery.getCompletionDate());
-					deliveryResponse.setOrderDate(delivery.getOrderDate());
-					deliveryResponse.setTax(delivery.getTax());
-					deliveryResponse.setStatus(delivery.getStatus());
-					return ResponseEntity.ok(deliveryResponse);
-				})
+				delivery -> ResponseEntity.ok(deliveryAssembler.toModel(delivery)))
 				.orElse(ResponseEntity.notFound().build());
 	}
 }
