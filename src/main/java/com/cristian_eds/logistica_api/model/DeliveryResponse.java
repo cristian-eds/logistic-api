@@ -8,23 +8,24 @@ import com.cristian_eds.logistica_api.domain.model.DeliveryStatus;
 public class DeliveryResponse {
 	
 	private Long id;
-	private String clientName;
+	private ShortClientResponse client;
 	private AddresseeResponse addressee;
 	private BigDecimal tax;
 	private DeliveryStatus status;
 	private OffsetDateTime orderDate;
 	private OffsetDateTime completionDate;
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getClientName() {
-		return clientName;
+	public ShortClientResponse getClient() {
+		return client;
 	}
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
+	public void setClient(ShortClientResponse client) {
+		this.client = client;
 	}
 	public AddresseeResponse getAddressee() {
 		return addressee;

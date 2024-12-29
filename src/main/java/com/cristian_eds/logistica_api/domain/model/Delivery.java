@@ -4,10 +4,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
-import com.cristian_eds.logistica_api.domain.model.validations.ValidationGroups;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,11 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.groups.ConvertGroup;
-import jakarta.validation.groups.Default;
-
 
 @Entity
 public class Delivery {
@@ -29,27 +20,19 @@ public class Delivery {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Valid
 	@ManyToOne
-	@ConvertGroup(from = Default.class, to = ValidationGroups.ClientId.class)
 	private Client client;
-	
-	@Valid
+
 	@Embedded
-	@NotNull
 	private Addressee addressee;
-	
-	@NotNull
+
 	private BigDecimal tax;
-	
-	@JsonProperty(access = Access.READ_ONLY)
+
 	@Enumerated(EnumType.STRING)
 	private DeliveryStatus status;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	private OffsetDateTime orderDate;
-	
-	@JsonProperty(access = Access.READ_ONLY)
+
 	private OffsetDateTime completionDate;
 	
 	public Delivery() {

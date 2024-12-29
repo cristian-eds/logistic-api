@@ -17,6 +17,7 @@ import com.cristian_eds.logistica_api.assembler.DeliveryAssembler;
 import com.cristian_eds.logistica_api.domain.model.Delivery;
 import com.cristian_eds.logistica_api.domain.service.RegistrationDeliveryService;
 import com.cristian_eds.logistica_api.model.DeliveryResponse;
+import com.cristian_eds.logistica_api.model.request.DeliveryRequest;
 import com.cristian_eds.logistica_api.repository.DeliveryRepository;
 
 import jakarta.validation.Valid;
@@ -36,14 +37,15 @@ public class DeliveryController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public DeliveryResponse register(@Valid @RequestBody Delivery delivery) {
-		Delivery deliveryRegistered = registrationDeliveryService.register(delivery);
+	public DeliveryResponse register(@Valid @RequestBody DeliveryRequest deliveryRequest) {
+		Delivery newDelivery = deliveryAssembler.toEntity(deliveryRequest);
+		Delivery deliveryRegistered = registrationDeliveryService.register(newDelivery);
 		return deliveryAssembler.toModel(deliveryRegistered);
 	}
 	
 	@GetMapping
 	public List<DeliveryResponse> listAll() {
-		return  deliveryAssembler.toCollectionModel(deliveryRepository.findAll());
+		return deliveryAssembler.toCollectionModel(deliveryRepository.findAll());
 	}
 	
 	@GetMapping("/{deliveryId}")
