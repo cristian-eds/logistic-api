@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cristian_eds.logistica_api.domain.model.Delivery;
 import com.cristian_eds.logistica_api.domain.service.RegistrationDeliveryService;
+import com.cristian_eds.logistica_api.model.AddresseeResponse;
+import com.cristian_eds.logistica_api.model.DeliveryResponse;
 import com.cristian_eds.logistica_api.repository.DeliveryRepository;
 
 import jakarta.validation.Valid;
@@ -41,8 +43,24 @@ public class DeliveryController {
 	}
 	
 	@GetMapping("/{deliveryId}")
-	public ResponseEntity<Delivery> findById(@PathVariable Long deliveryId) {
-		return deliveryRepository.findById(deliveryId).map(ResponseEntity::ok)
+	public ResponseEntity<DeliveryResponse> findById(@PathVariable Long deliveryId) {
+		return deliveryRepository.findById(deliveryId).map(
+				delivery -> {
+					DeliveryResponse deliveryResponse = new DeliveryResponse();
+					deliveryResponse.setId(delivery.getId());
+					deliveryResponse.setClientName(delivery.getClient().getName());
+					deliveryResponse.setAddressee(new AddresseeResponse());
+					deliveryResponse.getAddressee().setAdditionalInformation(delivery.getAddressee().getAdditionalInformation());
+					deliveryResponse.getAddressee().setDistrict(delivery.getAddressee().getDistrict());
+					deliveryResponse.getAddressee().setName(delivery.getAddressee().getName());
+					deliveryResponse.getAddressee().setNumber(delivery.getAddressee().getNumber());
+					deliveryResponse.getAddressee().setStreet(delivery.getAddressee().getStreet());
+					deliveryResponse.setCompletionDate(delivery.getCompletionDate());
+					deliveryResponse.setOrderDate(delivery.getOrderDate());
+					deliveryResponse.setTax(delivery.getTax());
+					deliveryResponse.setStatus(delivery.getStatus());
+					return ResponseEntity.ok(deliveryResponse);
+				})
 				.orElse(ResponseEntity.notFound().build());
 	}
 }

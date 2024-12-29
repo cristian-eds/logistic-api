@@ -1,6 +1,6 @@
 package com.cristian_eds.logistica_api.domain.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class RegistrationDeliveryService {
 		Client client = clientService.findClient(delivery.getClient().getId());
 		delivery.setClient(client);
 		delivery.setStatus(DeliveryStatus.PENDING);
-		delivery.setOrderDate(LocalDateTime.now());
+		delivery.setOrderDate(OffsetDateTime.now());
 		System.out.println(delivery.getAddressee().getAdditionalInformation());
 		return repository.save(delivery);
 	}

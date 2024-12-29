@@ -1,7 +1,7 @@
 package com.cristian_eds.logistica_api.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import com.cristian_eds.logistica_api.domain.model.validations.ValidationGroups;
@@ -47,17 +47,17 @@ public class Delivery {
 	private DeliveryStatus status;
 	
 	@JsonProperty(access = Access.READ_ONLY)
-	private LocalDateTime orderDate;
+	private OffsetDateTime orderDate;
 	
 	@JsonProperty(access = Access.READ_ONLY)
-	private LocalDateTime completionDate;
+	private OffsetDateTime completionDate;
 	
 	public Delivery() {
 		super();
 	}
 
 	public Delivery(Long id, Client client, Addressee addressee, BigDecimal tax, DeliveryStatus status,
-			LocalDateTime orderDate, LocalDateTime completionDate) {
+			OffsetDateTime orderDate, OffsetDateTime completionDate) {
 		super();
 		this.id = id;
 		this.client = client;
@@ -108,19 +108,19 @@ public class Delivery {
 		this.status = status;
 	}
 
-	public LocalDateTime getOrderDate() {
+	public OffsetDateTime getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(LocalDateTime orderDate) {
+	public void setOrderDate(OffsetDateTime orderDate) {
 		this.orderDate = orderDate;
 	}
 
-	public LocalDateTime getCompletionDate() {
+	public OffsetDateTime getCompletionDate() {
 		return completionDate;
 	}
 
-	public void setCompletionDate(LocalDateTime completionDate) {
+	public void setCompletionDate(OffsetDateTime completionDate) {
 		this.completionDate = completionDate;
 	}
 
