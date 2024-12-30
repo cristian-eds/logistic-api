@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.cristian_eds.logistica_api.domain.exception.DomainException;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -150,5 +152,18 @@ public class Delivery {
 		
 		return event;
 	}
+	
+	public void finalize() {
+		if (!canBeFinished()) {
+			throw new DomainException("Delivery cannot be completed");
+		}
+		setStatus(DeliveryStatus.FINALIZED);
+		setCompletionDate(OffsetDateTime.now());
+	}
+	
+	public boolean canBeFinished() {
+		return DeliveryStatus.PENDING.equals(getStatus());
+	}
+
 	
 }

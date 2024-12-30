@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cristian_eds.logistica_api.assembler.DeliveryAssembler;
 import com.cristian_eds.logistica_api.domain.model.Delivery;
+import com.cristian_eds.logistica_api.domain.service.FinalizationDeliveryService;
 import com.cristian_eds.logistica_api.domain.service.RegistrationDeliveryService;
 import com.cristian_eds.logistica_api.model.DeliveryResponse;
 import com.cristian_eds.logistica_api.model.request.DeliveryRequest;
@@ -35,6 +37,9 @@ public class DeliveryController {
 	@Autowired
 	private DeliveryAssembler deliveryAssembler;
 	
+	@Autowired
+	private FinalizationDeliveryService finalizationDeliveryService;
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public DeliveryResponse register(@Valid @RequestBody DeliveryRequest deliveryRequest) {
@@ -53,5 +58,11 @@ public class DeliveryController {
 		return deliveryRepository.findById(deliveryId).map(
 				delivery -> ResponseEntity.ok(deliveryAssembler.toModel(delivery)))
 				.orElse(ResponseEntity.notFound().build());
+	}
+	
+	@PutMapping("/{deliveryId}/finalization")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void finalize(@PathVariable Long deliveryId) {
+		finalizationDeliveryService.finalize(deliveryId);
 	}
 }
